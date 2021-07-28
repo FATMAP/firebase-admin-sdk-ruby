@@ -48,6 +48,24 @@ module Firebase
           get_user_by(uid: uid)
         end
 
+        # Update the user
+        def update_user(uid: nil, display_name: nil) #, email: nil, email_verified: nil, phone_number: nil, photo_url: nil, password: nil, disabled: nil)
+          payload = {
+            localId: validate_uid(uid),
+            displayName: validate_display_name(display_name),
+            #email: validate_email(email),
+            #phoneNumber: validate_phone_number(phone_number),
+            #photoUrl: validate_photo_url(photo_url),
+            #password: validate_password(password),
+            #emailVerified: to_boolean(email_verified),
+            #disabled: to_boolean(disabled)
+          }.compact
+          res = @client.post(with_path("accounts"), payload).body
+          uid = res&.fetch("localId")
+          raise CreateUserError, "failed to update user #{res}" if uid.nil?
+          get_user_by(uid: uid)
+        end
+
         # Gets the user corresponding to the provided key
         #
         # @param [Hash] query Query parameters to search for a user by.
