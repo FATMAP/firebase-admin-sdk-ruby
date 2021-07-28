@@ -60,7 +60,7 @@ module Firebase
             #emailVerified: to_boolean(email_verified),
             #disabled: to_boolean(disabled)
           }.compact
-          res = @client.post(with_path("accounts"), payload).body
+          res = @client.post(with_path("accounts:update"), payload).body
           uid = res&.fetch("localId")
           raise CreateUserError, "failed to update user #{res}" if uid.nil?
           get_user_by(uid: uid)
