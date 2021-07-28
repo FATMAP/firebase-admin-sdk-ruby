@@ -13,16 +13,13 @@ This gem is currently in alpha and not recommended for production use (yet).
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'firebase-admin-sdk'
+gem 'firebase-admin-sdk', git: 'https://github.com/navazka/firebase-admin-sdk-ruby.git'
 ```
 
 And then execute:
 
     $ bundle install
 
-Or install it yourself as:
-
-    $ gem install firebase-admin-sdk
 
 ## Usage
 
