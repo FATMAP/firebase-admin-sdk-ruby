@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Firebase
   module Admin
     module Auth
@@ -45,6 +47,7 @@ module Firebase
           res = @client.post(with_path("accounts"), payload).body
           uid = res&.fetch("localId")
           raise CreateUserError, "failed to create user #{res}" if uid.nil?
+
           get_user_by(uid: uid)
         end
 
@@ -65,7 +68,28 @@ module Firebase
           res = @client.post(with_path("accounts:update"), payload).body
           uid = res&.fetch("localId")
           raise CreateUserError, "failed to update user #{res}" if uid.nil?
+
           get_user_by(uid: uid)
+        end
+
+        #
+        # List users
+        #
+        def list_users
+          max_results = 1000
+          payload = {maxResults: max_results}.compact
+          # payload['nextPageToken'] = page_token if page_token.present?
+
+          res = @client.get(with_path("accounts:batchGet"), payload)
+          raise CreateUserError, "failed to list users #{res}" unless res.success?
+
+          users = res.body["users"]
+          return [] if users.blank?
+
+          users.each_with_index.
+            collect do |_z, i|
+            UserRecord.new(users[i])
+          end
         end
 
         #
@@ -79,9 +103,9 @@ module Firebase
           res = @client.post(with_path("accounts:update"), payload).body
           uid = res&.fetch("localId")
           raise CreateUserError, "failed to set claims for user #{res}" if uid.nil?
+
           get_user_by(uid: uid)
         end
-
 
         # Gets the user corresponding to the provided key
         #
@@ -103,7 +127,7 @@ module Firebase
           end
           res = @client.post(with_path("accounts:lookup"), payload).body
           users = res["users"] if res
-          UserRecord.new(users[0]) if users.is_a?(Array) && users.length > 0
+          UserRecord.new(users[0]) if users.is_a?(Array) && users.length.positive?
         end
 
         # Deletes the user corresponding to the specified user id.
@@ -112,6 +136,18 @@ module Firebase
         #   The id of the user.
         def delete_user(uid)
           @client.post(with_path("accounts:delete"), {localId: validate_uid(uid, required: true)})
+        end
+
+        # Deletes the users corresponding to the specified user ids.
+        #
+        # @param [String] uids
+        #   The ids of the users.
+        def delete_users(uids)
+          # force_delete: Optional parameter that indicates if users should be
+          # deleted, even if they're not disabled. Defaults to False.
+          # https://github.com/firebase/firebase-admin-python/blob/01db7eb8da6094e09fc0311930718deec5ccd4ad/firebase_admin/_user_mgt.py
+          force_delete = true
+          @client.post(with_path("accounts:batchDelete"), {localIds: uids, force: force_delete})
         end
 
         private

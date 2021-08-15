@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Firebase
   module Admin
     module Auth
@@ -52,6 +54,13 @@ module Firebase
           )
         end
 
+        # Get all the users.
+        #
+        # @return [UserRecord]
+        def list_users
+          @user_manager.list_users
+        end
+
         # Gets the user corresponding to the specified user id.
         #
         # @param [String] uid
@@ -85,6 +94,14 @@ module Firebase
         #   The id of the user.
         def delete_user(uid)
           @user_manager.delete_user(uid)
+        end
+
+        # Deletes the users corresponding to the specified user ids.
+        #
+        # @param [String] uids
+        #   The id of the users.
+        def delete_users(uids)
+          @user_manager.delete_users(uids)
         end
 
         # Verifies the signature and data for the provided JWT.
