@@ -54,20 +54,14 @@ module Firebase
         #
         # Update the user
         #
-        def update_user(uid, display_name: nil, email: nil, email_verified: nil, phone_number: nil, photo_url: nil, password: nil, disabled: nil)
+        def update_user(uid, email: nil)
           payload = {
             localId: validate_uid(uid),
-            displayName: validate_display_name(display_name),
             email: validate_email(email),
-            phoneNumber: validate_phone_number(phone_number),
-            photoUrl: validate_photo_url(photo_url),
-            password: validate_password(password),
-            emailVerified: to_boolean(email_verified),
-            disabled: to_boolean(disabled)
           }.compact
           res = @client.post(with_path("accounts:update"), payload).body
           uid = res&.fetch("localId")
-          raise CreateUserError, "failed to update user #{res}" if uid.nil?
+          raise UpdateUserError, "failed to update user #{res}" if uid.nil?
 
           get_user_by(uid: uid)
         end
