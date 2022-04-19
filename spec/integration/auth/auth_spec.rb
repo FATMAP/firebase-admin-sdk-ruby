@@ -1,6 +1,11 @@
 require_relative "../spec_helper"
 
 describe "Firebase::Admin::Auth::Client" do
+  around do |example|
+    ClimateControl.modify(FIREBASE_AUTH_EMULATOR_HOST: "localhost:9099") do
+      example.run
+    end
+  end
   include Helpers::Auth
 
   let(:app) { Firebase::Admin::App.new(credentials: create_app_credentials, config: create_app_config) }

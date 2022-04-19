@@ -1,5 +1,7 @@
+require "active_support/isolated_execution_state"
 require "rspec"
 require "firebase-admin-sdk"
+require "climate_control"
 
 require_relative "helpers/auth"
 
