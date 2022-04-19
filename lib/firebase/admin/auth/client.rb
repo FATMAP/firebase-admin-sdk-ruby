@@ -54,6 +54,21 @@ module Firebase
           )
         end
 
+        # Updates a user account with the specified properties.
+        #
+        # @param [String, nil] uid The id of the user to update.
+        # @param [String, nil] email The user’s primary email.
+        #
+        # @raise [UpdateUserError] if a user cannot be updated.
+        #
+        # @return [UserRecord]
+        def update_user(uid, email: nil)
+          @user_manager.update_user(
+            uid,
+            email: email,
+          )
+        end
+
         # Get all the users.
         #
         # @return [UserRecord]

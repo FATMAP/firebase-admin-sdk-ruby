@@ -18,8 +18,7 @@ module Firebase
         def validate_email(email, required: false)
           return nil if email.nil? && !required
           raise ArgumentError, "email must be a non-empty string" unless email.is_a?(String) && !email.empty?
-          parts = email.split("@")
-          raise ArgumentError, "email is malformed #{email}" unless parts.length == 2 && !parts[0].empty? && !parts[1].empty?
+          raise ArgumentError, "email is malformed #{email}" unless email.match?(URI::MailTo::EMAIL_REGEXP)
           email
         end
 
