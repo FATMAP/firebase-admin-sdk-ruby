@@ -18,6 +18,9 @@ module Firebase
 
       # Raised when a user cannot be created.
       class CreateUserError < Error; end
+
+      # Raised when a user cannot be updated.
+      class UpdateUserError < Error; end
     end
   end
 end
