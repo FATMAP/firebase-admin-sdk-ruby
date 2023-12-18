@@ -58,14 +58,16 @@ module Firebase
         #
         # @param [String, nil] uid The id of the user to update.
         # @param [String, nil] email The user’s primary email.
+        # @param [Boolean, nil] disabled A boolean indicating whether or not the user account is disabled.
         #
         # @raise [UpdateUserError] if a user cannot be updated.
         #
         # @return [UserRecord]
-        def update_user(uid, email: nil)
+        def update_user(uid, email: nil, disabled: nil)
           @user_manager.update_user(
             uid,
             email: email,
+            disabled: disabled
           )
         end
 
