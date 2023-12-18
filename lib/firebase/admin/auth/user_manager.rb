@@ -54,10 +54,11 @@ module Firebase
         #
         # Update the user
         #
-        def update_user(uid, email: nil)
+        def update_user(uid, email: nil, disabled: nil)
           payload = {
             localId: validate_uid(uid),
             email: validate_email(email),
+            disabled: to_boolean(disabled)
           }.compact
           res = @client.post(with_path("accounts:update"), payload).body
           uid = res&.fetch("localId")
