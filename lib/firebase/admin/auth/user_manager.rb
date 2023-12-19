@@ -58,7 +58,7 @@ module Firebase
           payload = {
             localId: validate_uid(uid),
             email: validate_email(email),
-            disabled: to_boolean(disabled)
+            disableUser: to_boolean(disabled)
           }.compact
           res = @client.post(with_path("accounts:update"), payload).body
           uid = res&.fetch("localId")
